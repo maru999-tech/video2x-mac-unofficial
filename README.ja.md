@@ -1,6 +1,12 @@
-# video2x.sh マニュアル
+# video2x-mac-unofficial
 
-Video2X 相当のローカル動画処理ツール（macOS / Apple Silicon 用）。
+> ⚠️ **非公式・独立プロジェクト — 本家 Video2X ではありません。**
+> 本家 [Video2X](https://github.com/k4yt3x/video2x)（k4yt3x 氏）とは**無関係・非公認**で、
+> **コードも一切共有していません**。本家と**同じ下回りエンジン**（Real-ESRGAN / RIFE の
+> `ncnn-vulkan`）を叩く、macOS向けの独立したシェルスクリプトです。名前の "video2x" は
+> 「同じ2機能をやる」という意味だけです。本家が必要な方は上のリンクへ。
+
+Video2X *相当*のローカル動画処理ツール（macOS / Apple Silicon 用）。
 機能は Video2X と同じ **2つだけ**：
 
 1. **超解像アップスケール** — Real-ESRGAN（`realesr-animevideov3`）で解像度を**倍率**で拡大

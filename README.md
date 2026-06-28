@@ -1,6 +1,13 @@
-# video2x-mac
+# video2x-mac-unofficial
 
-A tiny, **Apple-Silicon-native** Video2X-style CLI for macOS. It does exactly two things — the same two as Video2X — and nothing else:
+> ⚠️ **Unofficial & independent — NOT the original Video2X.**
+> This project is **not affiliated with, endorsed by, or derived from** the original
+> [Video2X](https://github.com/k4yt3x/video2x) by k4yt3x. It shares **no code** with it.
+> It is a separate macOS shell-script wrapper that drives the **same underlying
+> `ncnn-vulkan` engines** (Real-ESRGAN, RIFE). The "video2x" in the name only means it
+> performs the same two functions. For the real Video2X, go to the link above.
+
+A tiny, **Apple-Silicon-native** Video2X-*style* CLI for macOS. It does exactly two things — the same two as Video2X — and nothing else:
 
 1. **Super-resolution upscaling** by a **ratio** (Real-ESRGAN, anime/photo models)
 2. **Frame interpolation** by a **ratio** (RIFE) for smoother motion
@@ -9,7 +16,7 @@ No forced target resolutions, no aspect-ratio changes, no padding. The resolutio
 
 > Why this exists: the upstream [Video2X](https://github.com/k4yt3x/video2x) is great but historically painful to run on Mac. This is a single shell script around the same `ncnn-vulkan` engines, tuned for Apple Silicon.
 
-🇯🇵 日本語の詳しい説明は [README.ja.md](README.ja.md) を参照してください。
+🌐 Other languages: [日本語 (README.ja.md)](README.ja.md) · [中文 (README.zh.md)](README.zh.md)
 
 ---
 
@@ -21,8 +28,8 @@ No forced target resolutions, no aspect-ratio changes, no padding. The resolutio
 ## Install
 
 ```bash
-git clone https://github.com/maru999-tech/video2x-mac.git
-cd video2x-mac
+git clone https://github.com/maru999-tech/video2x-mac-unofficial.git
+cd video2x-mac-unofficial
 ./setup.sh          # downloads the Real-ESRGAN + RIFE ncnn-vulkan binaries & models
 ./video2x.sh -h
 ```
