@@ -33,7 +33,17 @@ cd video2x-mac-unofficial
 
 `setup.sh` 会从各自的官方 GitHub Release 获取第三方二进制（**仓库内不打包**），并清除 macOS 隔离属性。
 
-## 用法
+## 图形界面（可选）
+
+内置一个极简的本地网页 GUI——无需上传、原生文件选择、实时进度、三语（EN/中/日）：
+
+```bash
+python3 gui.py        # 随后浏览器会打开 http://127.0.0.1:8765
+```
+
+或在访达中**双击 `video2x-gui.command`**。底层调用同一个 `video2x.sh`（仅需 Python 3 标准库，无需额外安装）。
+
+## 用法（命令行）
 
 ```bash
 ./video2x.sh -i input.mp4 [-s 2|3|4] [-f N] [-m anime|photo|anime-video] [-x N] [-u on|off] [-r on|off]

@@ -36,7 +36,17 @@ cd video2x-mac-unofficial
 
 `setup.sh` fetches the third-party binaries from their official GitHub releases (they are **not** bundled in this repo) and clears the macOS quarantine flag.
 
-## Usage
+## GUI (optional)
+
+A tiny local web GUI is included — no upload, native file picker, live progress, trilingual (EN/中/日):
+
+```bash
+python3 gui.py        # then a browser tab opens at http://127.0.0.1:8765
+```
+
+Or just **double-click `video2x-gui.command`** in Finder. It calls the same `video2x.sh` underneath (Python 3 only, standard library — no extra installs).
+
+## Usage (CLI)
 
 ```bash
 ./video2x.sh -i input.mp4 [-s 2|3|4] [-f N] [-m anime|photo|anime-video] [-x N] [-u on|off] [-r on|off]
