@@ -1,0 +1,14 @@
+# 取得したバイナリ・モデル（setup.sh で再取得するため追跡しない）
+tools/
+
+# テスト素材・出力
+sample/
+*_v2x.mp4
+*_v2x_hevc.mp4
+*_v2x_4k.mp4
+
+# 個人用メモ（Seedanceスキル関連・公開対象外）
+SEEDANCE_*
+
+# macOS
+.DS_Store
