@@ -37,8 +37,10 @@ PAGE = r"""<!DOCTYPE html>
   .toggle{display:flex;align-items:center;gap:8px;margin-top:22px}
   .toggle input{width:auto}
   #run{width:100%;padding:12px;font-size:15px;margin-top:4px}
-  .bar{height:8px;background:#0d1117;border-radius:6px;overflow:hidden;margin:10px 0}
-  .bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+  .bar{position:relative;height:10px;background:#0d1117;border-radius:6px;overflow:hidden;margin:10px 0}
+  .bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+  .bar.run>i{min-width:8%;background-image:linear-gradient(45deg,rgba(255,255,255,.30) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.30) 50%,rgba(255,255,255,.30) 75%,transparent 75%,transparent);background-size:22px 22px;animation:stripe .8s linear infinite}
+  @keyframes stripe{from{background-position:0 0}to{background-position:22px 0}}
   #step{font-size:13px;color:var(--fg);margin-bottom:4px}
   pre{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:240px;overflow:auto;font:12px/1.45 ui-monospace,Menlo,monospace;white-space:pre-wrap;margin:0}
   .done{color:var(--ok)} .bad{color:var(--err)}
@@ -97,7 +99,7 @@ PAGE = r"""<!DOCTYPE html>
 
   <div class="card">
     <div id="step" data-i18n="idle">待機中</div>
-    <div class="bar"><i id="barfill"></i></div>
+    <div class="bar" id="bar"><i id="barfill"></i></div>
     <pre id="log"></pre>
     <div id="result" class="muted" style="margin-top:10px"></div>
   </div>
@@ -105,43 +107,57 @@ PAGE = r"""<!DOCTYPE html>
 </div>
 <script>
 const I18N = {
-  ja:{tagline:"超解像アップスケール＋フレーム補間（ローカル / Apple Silicon）",input:"入力動画",browse:"選択…",model:"モデル",scale:"アップスケール倍率",factor:"補間倍率",cap:"解像度上限(長辺px, 0=無制限)",t_up:"アップスケール",t_interp:"フレーム補間",run:"実行",idle:"待機中",running:"処理中…",done:"完了",failed:"失敗",reveal:"フォルダで表示",nofile:"入力動画を選んでください",m_anime:"anime（線がくっきり・既定）",m_photo:"photo（実写寄り）",m_av:"anime-video（柔らかい）"},
-  zh:{tagline:"超分辨率放大 + 补帧（本地 / Apple Silicon）",input:"输入视频",browse:"选择…",model:"模型",scale:"放大倍率",factor:"补帧倍率",cap:"分辨率上限(长边px, 0=不限)",t_up:"放大",t_interp:"补帧",run:"运行",idle:"待机",running:"处理中…",done:"完成",failed:"失败",reveal:"在访达中显示",nofile:"请选择输入视频",m_anime:"anime（线条锐利·默认）",m_photo:"photo（写实）",m_av:"anime-video（偏柔）"},
-  en:{tagline:"Super-resolution upscale + frame interpolation (local / Apple Silicon)",input:"Input video",browse:"Browse…",model:"Model",scale:"Upscale ratio",factor:"Interp ratio",cap:"Max long side (px, 0=off)",t_up:"Upscale",t_interp:"Interpolate",run:"Run",idle:"Idle",running:"Working…",done:"Done",failed:"Failed",reveal:"Reveal in Finder",nofile:"Please choose an input video",m_anime:"anime (crisp lines, default)",m_photo:"photo (realistic)",m_av:"anime-video (soft)"}
+  ja:{tagline:"超解像アップスケール＋フレーム補間（ローカル / Apple Silicon）",input:"入力動画",browse:"選択…",model:"モデル",scale:"アップスケール倍率",factor:"補間倍率",cap:"解像度上限(長辺px, 0=無制限)",t_up:"アップスケール",t_interp:"フレーム補間",run:"実行",idle:"待機中",running:"処理中…",done:"完了",failed:"失敗",reveal:"フォルダで表示",nofile:"入力動画を選んでください",m_anime:"anime（線がくっきり・既定）",m_photo:"photo（実写寄り）",m_av:"anime-video（柔らかい）",ready:"準備OK（サーバ稼働中）",note:"重い処理中はログが止まって見えても、タイマーとバーが動いていれば処理中です"},
+  zh:{tagline:"超分辨率放大 + 补帧（本地 / Apple Silicon）",input:"输入视频",browse:"选择…",model:"模型",scale:"放大倍率",factor:"补帧倍率",cap:"分辨率上限(长边px, 0=不限)",t_up:"放大",t_interp:"补帧",run:"运行",idle:"待机",running:"处理中…",done:"完成",failed:"失败",reveal:"在访达中显示",nofile:"请选择输入视频",m_anime:"anime（线条锐利·默认）",m_photo:"photo（写实）",m_av:"anime-video（偏柔）",ready:"就绪（服务器运行中）",note:"重负载阶段日志可能静止，但只要计时器和进度条在动，就是在处理"},
+  en:{tagline:"Super-resolution upscale + frame interpolation (local / Apple Silicon)",input:"Input video",browse:"Browse…",model:"Model",scale:"Upscale ratio",factor:"Interp ratio",cap:"Max long side (px, 0=off)",t_up:"Upscale",t_interp:"Interpolate",run:"Run",idle:"Idle",running:"Working…",done:"Done",failed:"Failed",reveal:"Reveal in Finder",nofile:"Please choose an input video",m_anime:"anime (crisp lines, default)",m_photo:"photo (realistic)",m_av:"anime-video (soft)",ready:"Ready (server up)",note:"During heavy steps the log may pause — if the timer and bar are moving, it's working"}
 };
 let lang="ja";
 function applyLang(){const d=I18N[lang];document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k])e.textContent=d[k]});document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===lang));}
-document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;applyLang();});
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;applyLang();if(!baseStep)idle();});
 const $=id=>document.getElementById(id);
 $("pick").onclick=async()=>{const r=await fetch("/pick");const j=await r.json();if(j.path)$("path").value=j.path;};
 function setBar(p){$("barfill").style.width=Math.max(0,Math.min(100,p))+"%";}
-let es=null;
+let es=null, tmr=null, spnr=null, t0=0, curStep=0, lastPct="", baseStep="";
+const SPIN=["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"]; let spi=0;
+const RANGE={1:[0,8],2:[8,68],3:[68,90],4:[90,98],5:[98,100]};
+function fmt(s){const m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+function renderStep(){
+  if(!baseStep)return;
+  const el=fmt(Math.floor((Date.now()-t0)/1000));
+  $("step").innerHTML=SPIN[spi%SPIN.length]+" "+baseStep+(lastPct?' · '+lastPct:'')+'  <span class="muted">⏱ '+el+'</span>';
+}
+function startTickers(){stopTickers();spnr=setInterval(()=>{spi++;renderStep();},120);tmr=setInterval(renderStep,1000);}
+function stopTickers(){if(spnr)clearInterval(spnr);if(tmr)clearInterval(tmr);spnr=tmr=null;}
+function idle(){stopTickers();baseStep="";$("bar").classList.remove("run");$("step").innerHTML='<span class="done">●</span> '+I18N[lang].ready+' &nbsp;<span class="muted">'+I18N[lang].note+'</span>';}
 $("run").onclick=()=>{
   const inp=$("path").value.trim();
   if(!inp){alert(I18N[lang].nofile);return;}
   if(es)es.close();
   $("log").textContent="";$("result").textContent="";setBar(0);
-  $("step").textContent=I18N[lang].running;$("run").disabled=true;
+  curStep=0;lastPct="";baseStep=I18N[lang].running;t0=Date.now();
+  $("bar").classList.add("run");$("run").disabled=true;startTickers();renderStep();
   const q=new URLSearchParams({i:inp,s:$("s").value,f:$("f").value,m:$("m").value,x:$("x").value,u:$("u").checked?"on":"off",r:$("r").checked?"on":"off"});
   es=new EventSource("/run?"+q.toString());
   es.addEventListener("log",ev=>{
     const line=ev.data;
     const mStep=line.match(/\[(\d)\/5\]/);
-    if(mStep){$("step").textContent=line.replace(/^\[\d{2}:\d{2}:\d{2}\]\s*/,"");setBar(mStep[1]/5*100);}
+    if(mStep){curStep=+mStep[1];lastPct="";baseStep=line.replace(/^\[\d{2}:\d{2}:\d{2}\]\s*/,"");setBar(RANGE[curStep][0]);renderStep();
+      const log=$("log");log.textContent+=line+"\n";log.scrollTop=log.scrollHeight;return;}
     const mPct=line.match(/^\s*(\d+(?:\.\d+)?)%\s*$/);
-    if(mPct){return;} // パーセント行はログに流さずバー更新のみ対象外（行数削減）
+    if(mPct){lastPct=Math.round(+mPct[1])+"%";renderStep();return;} // %はログに流さず「活動中」表示に使う
     const log=$("log");log.textContent+=line+"\n";log.scrollTop=log.scrollHeight;
   });
   es.addEventListener("done",ev=>{
-    const j=JSON.parse(ev.data);es.close();es=null;$("run").disabled=false;
-    if(j.code===0){setBar(100);$("step").innerHTML='<span class="done">✓ '+I18N[lang].done+'</span>';
+    const j=JSON.parse(ev.data);es.close();es=null;stopTickers();$("run").disabled=false;$("bar").classList.remove("run");
+    const el=fmt(Math.floor((Date.now()-t0)/1000));
+    if(j.code===0){setBar(100);$("step").innerHTML='<span class="done">✓ '+I18N[lang].done+' · ⏱ '+el+'</span>';
       if(j.output){$("result").innerHTML=j.output+' &nbsp; <a href="#" id="rev">'+I18N[lang].reveal+'</a>';
         $("rev").onclick=e=>{e.preventDefault();fetch("/reveal?path="+encodeURIComponent(j.output));};}
     }else{$("step").innerHTML='<span class="bad">✗ '+I18N[lang].failed+' (exit '+j.code+')</span>';}
   });
-  es.onerror=()=>{if(es){es.close();es=null;}$("run").disabled=false;};
+  es.onerror=()=>{if(es){es.close();es=null;}stopTickers();$("run").disabled=false;$("bar").classList.remove("run");if(!baseStep)return;$("step").innerHTML+=' <span class="bad">(disconnected)</span>';};
 };
-applyLang();
+applyLang(); idle();
 </script>
 </body></html>"""
 
