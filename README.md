@@ -37,6 +37,7 @@ cd video2x-mac-unofficial
 `setup.sh` fetches the third-party binaries from their official GitHub releases (they are **not** bundled in this repo) and clears the macOS quarantine flag.
 
 ## GUI (optional)
+<img width="781" height="572" alt="image" src="https://github.com/user-attachments/assets/232a5a4c-629d-4d01-993f-b32d5c8c4f1a" />
 
 A tiny local web GUI is included — no upload, native file picker, live progress, trilingual (EN/中/日):
 
