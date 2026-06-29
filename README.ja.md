@@ -19,6 +19,9 @@ Video2X *相当*のローカル動画処理ツール（macOS / Apple Silicon 用
 
 ## 0. GUI（ブラウザ操作・任意）
 
+<img width="746" height="560" alt="image" src="https://github.com/user-attachments/assets/57c86096-8316-46d0-b4d1-2b03e5c66f30" />
+
+
 CLIが苦手なら、付属の小さなローカルWeb GUIが使えます。アップロード不要・ネイティブのファイル選択・進捗をリアルタイム表示・英中日3言語対応:
 
 ```bash
