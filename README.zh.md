@@ -34,6 +34,7 @@ cd video2x-mac-unofficial
 `setup.sh` 会从各自的官方 GitHub Release 获取第三方二进制（**仓库内不打包**），并清除 macOS 隔离属性。
 
 ## 图形界面（可选）
+<img width="727" height="503" alt="image" src="https://github.com/user-attachments/assets/918d6b36-16d1-4067-a4d0-45907b017b61" />
 
 内置一个极简的本地网页 GUI——无需上传、原生文件选择、实时进度、三语（EN/中/日）：
 
