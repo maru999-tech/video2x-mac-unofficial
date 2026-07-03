@@ -18,6 +18,7 @@ PAGE = r"""<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>video2x-mac-unofficial</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
   :root{--bg:#0f1216;--card:#171c23;--line:#283039;--fg:#e6edf3;--mut:#8b97a4;--acc:#4cc2ff;--ok:#3fb950;--err:#f85149}
   *{box-sizing:border-box}
@@ -161,6 +162,15 @@ applyLang(); idle();
 </script>
 </body></html>"""
 
+# タブ用 favicon（小サイズで読みやすいようアプリアイコンを簡略化：角丸＋再生マーク）
+FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">'
+           '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+           '<stop offset="0" stop-color="#0b3aa6"/><stop offset="1" stop-color="#38d0f8"/>'
+           '</linearGradient></defs>'
+           '<rect x="96" y="96" width="832" height="832" rx="210" fill="url(#g)"/>'
+           '<path d="M424 356 L424 668 L688 512 Z" fill="#ffffff"/></svg>')
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *a): pass
 
@@ -178,6 +188,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         q = urllib.parse.parse_qs(u.query)
         if u.path == "/":
             self._head(); self.wfile.write(PAGE.encode("utf-8")); return
+        if u.path == "/favicon.svg":
+            self._head(200, "image/svg+xml"); self.wfile.write(FAVICON.encode("utf-8")); return
         if u.path == "/pick":
             try:
                 out = subprocess.run(
