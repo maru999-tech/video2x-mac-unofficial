@@ -30,6 +30,8 @@ python3 gui.py        # ブラウザで http://127.0.0.1:8765 が開きます
 
 または Finder で **`video2x-gui.command` をダブルクリック**。中身は同じ `video2x.sh` を呼んでいます（Python 3 標準ライブラリのみ・追加インストール不要）。
 
+**Dockアプリ:** `./make-app.sh` を実行すると、アイコン付きの `Video2X.app` が生成されます。Dock にドラッグすればワンクリックで起動できます。
+
 ---
 
 ## 1. 基本の使い方（CLI）

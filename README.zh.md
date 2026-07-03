@@ -44,6 +44,8 @@ python3 gui.py        # 随后浏览器会打开 http://127.0.0.1:8765
 
 或在访达中**双击 `video2x-gui.command`**。底层调用同一个 `video2x.sh`（仅需 Python 3 标准库，无需额外安装）。
 
+**Dock 应用:** 运行 `./make-app.sh` 生成带图标的 `Video2X.app`，拖到 Dock 即可一键启动。
+
 ## 用法（命令行）
 
 ```bash

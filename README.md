@@ -47,6 +47,8 @@ python3 gui.py        # then a browser tab opens at http://127.0.0.1:8765
 
 Or just **double-click `video2x-gui.command`** in Finder. It calls the same `video2x.sh` underneath (Python 3 only, standard library — no extra installs).
 
+**Dock app:** run `./make-app.sh` to build `Video2X.app` (custom icon), then drag it to your Dock for one-click launch.
+
 ## Usage (CLI)
 
 ```bash

@@ -232,8 +232,15 @@ class ThreadingHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
 def main():
     if not os.path.isfile(SCRIPT):
         print("!! video2x.sh が見つかりません:", SCRIPT); return
-    httpd = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     url = "http://127.0.0.1:%d/" % PORT
+    try:
+        httpd = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
+    except OSError:
+        # 既に起動中: ブラウザを開くだけで終了（アプリを何度押しても安全）
+        if not os.environ.get("VIDEO2X_GUI_NOOPEN"):
+            webbrowser.open(url)
+        print("すでに起動中 / already running →", url)
+        return
     if not os.environ.get("VIDEO2X_GUI_NOOPEN"):
         threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     print("video2x GUI →", url, " (Ctrl+C で終了 / Ctrl+C to stop)")

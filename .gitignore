@@ -10,5 +10,9 @@ sample/
 # 個人用メモ（Seedanceスキル関連・公開対象外）
 SEEDANCE_*
 
+# ビルド成果物（make-app.sh で生成。パス埋め込みのため追跡しない）
+Video2X.app/
+Video2X.icns
+
 # macOS
 .DS_Store
