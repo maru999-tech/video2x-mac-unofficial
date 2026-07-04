@@ -30,6 +30,10 @@
 #
 set -euo pipefail
 
+# GUI/Dockアプリ/Finder/osascript から起動されると PATH が最小構成になり、
+# Homebrew の ffmpeg(/opt/homebrew/bin など) が見えないことがある。明示的に補う。
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # ---- ツールの場所（必要なら環境変数で上書き可） ---------------------------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TOOLS_DIR="${VIDEO2X_TOOLS:-$SCRIPT_DIR/tools}"
