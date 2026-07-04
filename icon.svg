@@ -1,29 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b3aa6"/>
-      <stop offset="0.55" stop-color="#2b6cff"/>
-      <stop offset="1" stop-color="#38d0f8"/>
-    </linearGradient>
-    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  <!-- squircle -->
-  <rect x="96" y="96" width="832" height="832" rx="200" fill="url(#bg)"/>
-  <rect x="96" y="96" width="832" height="832" rx="200" fill="url(#sheen)"/>
-  <!-- play triangle (video) -->
-  <path d="M452 388 L452 636 L648 512 Z" fill="#ffffff"/>
-  <!-- four outward expand arrows (upscale) -->
-  <g fill="none" stroke="#eaf6ff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-    <!-- top-left -->
-    <path d="M300 388 L256 344 M256 420 L256 344 L332 344"/>
-    <!-- top-right -->
-    <path d="M724 388 L768 344 M692 344 L768 344 L768 420"/>
-    <!-- bottom-left -->
-    <path d="M300 636 L256 680 M256 604 L256 680 L332 680"/>
-    <!-- bottom-right -->
-    <path d="M724 636 L768 680 M768 604 L768 680 L692 680"/>
-  </g>
+ <defs>
+  <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+   <stop offset="0" stop-color="#7c3aed"/><stop offset="0.55" stop-color="#4f46e5"/><stop offset="1" stop-color="#22d3ee"/>
+  </linearGradient>
+  <linearGradient id="sh2" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0" stop-color="#ffffff" stop-opacity="0.25"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+ </defs>
+ <rect x="96" y="96" width="832" height="832" rx="205" fill="url(#bg2)"/>
+ <rect x="96" y="96" width="832" height="832" rx="205" fill="url(#sh2)"/>
+ <path d="M430 360 L430 664 L690 512 Z" fill="#ffffff"/>
+ <path d="M726 300 C734 356 748 370 804 378 C748 386 734 400 726 456 C718 400 704 386 648 378 C704 370 718 356 726 300 Z" fill="#ffffff"/>
+ <path d="M300 236 C305 268 313 276 345 281 C313 286 305 294 300 326 C295 294 287 286 255 281 C287 276 295 268 300 236 Z" fill="#eaf6ff" opacity="0.9"/>
 </svg>

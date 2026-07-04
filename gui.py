@@ -165,10 +165,12 @@ applyLang(); idle();
 # タブ用 favicon（小サイズで読みやすいようアプリアイコンを簡略化：角丸＋再生マーク）
 FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">'
            '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
-           '<stop offset="0" stop-color="#0b3aa6"/><stop offset="1" stop-color="#38d0f8"/>'
+           '<stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#22d3ee"/>'
            '</linearGradient></defs>'
            '<rect x="96" y="96" width="832" height="832" rx="210" fill="url(#g)"/>'
-           '<path d="M424 356 L424 668 L688 512 Z" fill="#ffffff"/></svg>')
+           '<path d="M430 356 L430 668 L694 512 Z" fill="#ffffff"/>'
+           '<path d="M742 300 C750 356 764 370 820 378 C764 386 750 400 742 456 '
+           'C734 400 720 386 664 378 C720 370 734 356 742 300 Z" fill="#ffffff"/></svg>')
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
