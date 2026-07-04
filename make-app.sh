@@ -31,9 +31,20 @@ fi
 rm -rf "$APP"
 osacompile -o "$APP" -e "do shell script \"nohup /usr/bin/python3 '$HERE/gui.py' >/tmp/v2xgui.log 2>&1 &\""
 
+# 独自の Bundle ID / 名前を付ける（汎用applet扱いを避け、アイコンキャッシュ対策にも有効）
+PB=/usr/libexec/PlistBuddy
+"$PB" -c "Set :CFBundleIdentifier com.maru999.video2x" "$APP/Contents/Info.plist" 2>/dev/null || \
+  "$PB" -c "Add :CFBundleIdentifier string com.maru999.video2x" "$APP/Contents/Info.plist"
+"$PB" -c "Set :CFBundleName Video2X" "$APP/Contents/Info.plist" 2>/dev/null || \
+  "$PB" -c "Add :CFBundleName string Video2X" "$APP/Contents/Info.plist"
+
 # 3) アイコン適用
 [ -f "$ICNS" ] && cp "$ICNS" "$APP/Contents/Resources/applet.icns"
 touch "$APP"
+
+# 4) LaunchServices に再登録（アイコン反映を確実にする）
+LSREG=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+[ -x "$LSREG" ] && "$LSREG" -f "$APP" || true
 
 echo "完成: $APP"
 echo "→ Finderで開いて Dock にドラッグしてください:  open -R \"$APP\""
