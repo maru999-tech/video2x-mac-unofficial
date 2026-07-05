@@ -124,7 +124,16 @@ trap cleanup EXIT
 # 実再生時間に合うフレームレートを使う。
 #   avg_frame_rate = 総フレーム数 / 再生時間 で、CFRでもVFRでも「実効fps」になる。
 #   r_frame_rate は VFR動画だと実効値より極端に大きい事があり、出力が破綻するため使わない。
-DURATION="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$INPUT" | tr -d '[:space:]')"
+# DURATION は「映像ストリームの長さ」を優先する。
+#   コンテナ長(format duration)を使うと、音声が映像より長いファイルで映像が
+#   引き伸ばされてスロー化するため（映像10秒＋音声50秒→出力50秒 等）。
+VDUR="$(ffprobe -v error -select_streams v:0 -show_entries stream=duration -of csv=p=0 "$INPUT" | tr -d '[:space:]')"
+FDUR="$(ffprobe -v error -show_entries format=duration           -of csv=p=0 "$INPUT" | tr -d '[:space:]')"
+DURATION=""
+for cand in "$VDUR" "$FDUR"; do
+  case "$cand" in ''|N/A|n/a) continue ;; esac
+  if awk "BEGIN{exit !($cand>0)}" 2>/dev/null; then DURATION="$cand"; break; fi
+done
 AFR="$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=p=0 "$INPUT" | tr -d '[:space:]')"
 RFR="$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate   -of csv=p=0 "$INPUT" | tr -d '[:space:]')"
 
@@ -259,7 +268,8 @@ MUX_AUDIO_IN=()
 MUX_AUDIO_MAP=()
 if [ -n "$HAS_AUDIO" ] && [ -f "$AUDIO" ]; then
   MUX_AUDIO_IN=(-i "$AUDIO")
-  MUX_AUDIO_MAP=(-map 0:v:0 -map 1:a:0 -c:a copy)
+  # -shortest: 音声が映像より長くても、映像の長さで打ち切る（末尾の黒画面/尺ズレ防止）
+  MUX_AUDIO_MAP=(-map 0:v:0 -map 1:a:0 -c:a copy -shortest)
 fi
 
 # 解像度/アスペクト比は触らず、フレームをそのまま符号化する
