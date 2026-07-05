@@ -38,9 +38,27 @@ PB=/usr/libexec/PlistBuddy
 "$PB" -c "Set :CFBundleName Video2X" "$APP/Contents/Info.plist" 2>/dev/null || \
   "$PB" -c "Add :CFBundleName string Video2X" "$APP/Contents/Info.plist"
 
-# 3) アイコン適用
+# 3) アイコン適用（バンドルアイコン）
 [ -f "$ICNS" ] && cp "$ICNS" "$APP/Contents/Resources/applet.icns"
 touch "$APP"
+
+# 3b) カスタムアイコン（リソースフォーク）も付与
+#     osacompile アプリは汎用アイコンがキャッシュされやすい。Finderのカスタムアイコン
+#     機構で上書きしておくと、キャッシュを迂回して確実に表示される。
+if [ -f "$ICNS" ] && command -v Rez >/dev/null 2>&1 && command -v DeRez >/dev/null 2>&1 && command -v SetFile >/dev/null 2>&1; then
+  TMPI="$(mktemp -d)"
+  if sips -s format png "$ICNS" --out "$TMPI/i.png" >/dev/null 2>&1; then
+    sips -i "$TMPI/i.png" >/dev/null 2>&1 || true
+    DeRez -only icns "$TMPI/i.png" > "$TMPI/i.rsrc" 2>/dev/null || true
+    if [ -s "$TMPI/i.rsrc" ]; then
+      ICONFILE="$APP/Icon"$'\r'
+      Rez -append "$TMPI/i.rsrc" -o "$ICONFILE" 2>/dev/null || true
+      SetFile -a C "$APP" 2>/dev/null || true
+      SetFile -a V "$ICONFILE" 2>/dev/null || true
+    fi
+  fi
+  rm -rf "$TMPI"
+fi
 
 # 4) LaunchServices に再登録（アイコン反映を確実にする）
 LSREG=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
